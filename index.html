@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D WebGL Landing Pages & Portfolios Showcase | Atharv Hogade</title>
+  <meta name="description" content="Curated directory of 20+ live 3D WebGL experiences, automotive configurators, product showcases, and 15 developer portfolios created by Atharv Hogade.">
+  <link rel="icon" href="https://cyber-atharv.github.io/interactive-3d-portfolio/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: radial-gradient(circle at 10% 20%, rgb(15, 18, 30) 0%, rgb(8, 10, 15) 90%);
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(59, 130, 246, 0.45);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 36px -10px rgba(59, 130, 246, 0.22);
+    }
+    .filter-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+    }
+    #toast {
+      transform: translateY(100px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #toast.show {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="min-h-screen p-6 md:p-12 selection:bg-blue-600 selection:text-white">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <header class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-5">
+        <i class="fa-solid fa-cube text-blue-400"></i> Curated Directory by Atharv Hogade (<a href="https://github.com/cyber-atharv" target="_blank" class="underline hover:text-white">@cyber-atharv</a>)
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
+        3D WebGL Landing Pages &amp; Showcase
+      </h1>
+      <p class="text-gray-400 text-base md:text-lg max-w-3xl mx-auto mb-8 leading-relaxed">
+        An interactive directory of <strong class="text-white">35 production-grade live web experiences</strong>: 20 high-fidelity 3D WebGL showcases, automotive configurators &amp; Awwwards-style scroll interactions, plus 15 personal developer portfolios.
+      </p>
+
+      <!-- Stats Bar -->
+      <div class="flex flex-wrap justify-center items-center gap-3 text-xs font-mono text-gray-300 mb-8">
+        <span class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10"><i class="fa-solid fa-layer-group text-blue-400 mr-2"></i>35 Deployed Sites</span>
+        <span class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10"><i class="fa-solid fa-cube text-purple-400 mr-2"></i>20 3D WebGL Experiences</span>
+        <span class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10"><i class="fa-solid fa-car text-red-400 mr-2"></i>4 Automotive Configurators</span>
+        <span class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10"><i class="fa-solid fa-bolt text-amber-400 mr-2"></i>60-120 FPS Real-time</span>
+        <button onclick="copyAllMarkdown()" class="px-3.5 py-2 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-300 hover:bg-blue-600 hover:text-white transition cursor-pointer">
+          <i class="fa-solid fa-share-nodes mr-1.5"></i> Copy All URLs (Markdown)
+        </button>
+      </div>
+
+      <!-- Controls: Filters & Search -->
+      <div class="flex flex-col lg:flex-row justify-between items-center gap-4 bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
+        <div class="flex flex-wrap justify-center gap-2" id="filters">
+          <button onclick="setFilter('all', this)" class="filter-btn active px-4 py-2 rounded-xl text-xs md:text-sm font-medium bg-white/5 hover:bg-white/10 text-gray-300 transition">All Projects (35)</button>
+          <button onclick="setFilter('3d-only', this)" class="filter-btn px-4 py-2 rounded-xl text-xs md:text-sm font-medium bg-white/5 hover:bg-white/10 text-gray-300 transition">✨ 3D Only (20)</button>
+          <button onclick="setFilter('automotive', this)" class="filter-btn px-4 py-2 rounded-xl text-xs md:text-sm font-medium bg-white/5 hover:bg-white/10 text-gray-300 transition">🏎️ Automotive (4)</button>
+          <button onclick="setFilter('product', this)" class="filter-btn px-4 py-2 rounded-xl text-xs md:text-sm font-medium bg-white/5 hover:bg-white/10 text-gray-300 transition">🍏 Commercial (5)</button>
+          <button onclick="setFilter('cinematic', this)" class="filter-btn px-4 py-2 rounded-xl text-xs md:text-sm font-medium bg-white/5 hover:bg-white/10 text-gray-300 transition">🌆 WebGL Worlds (7)</button>
+          <button onclick="setFilter('portfolio', this)" class="filter-btn px-4 py-2 rounded-xl text-xs md:text-sm font-medium bg-white/5 hover:bg-white/10 text-gray-300 transition">🎨 Portfolios (15)</button>
+        </div>
+        <div class="relative w-full lg:max-w-xs">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+          <input type="text" id="searchInput" oninput="searchCards()" placeholder="Search 3D model, tech, or title..." class="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-blue-500 transition">
+        </div>
+      </div>
+    </header>
+
+    <!-- Project Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projectGrid">
+      
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="automotive" 
+           data-3d="true" 
+           data-search="velox automotive car moto legend hypercar supercar canvas scroll 240 frames">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-red-600/10 text-red-400 border-red-600/20">Next.js 15 + Canvas Scroll</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">ULTRA LUXURY 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">VELOX Automotive Trilogy</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">A luxury automotive showcase featuring high-speed 240-frame scrub animations across 3 hypercar/superbike models: GT-X Supercar, RS1 Moto, and LX1 Hypercar.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Next.js 15</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5 Canvas</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GSAP</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/velox-automotive/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/velox-automotive" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/velox-automotive/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="automotive" 
+           data-3d="true" 
+           data-search="aerion gt supercar automotive car configurator camera sweep threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-red-600/10 text-red-400 border-red-600/20">Three.js + GSAP</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">SUPERCAR 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Aerion GT Supercar</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Gran Turismo supercar interactive experience with multi-angle 3D camera sweeps, dynamic headlights, engine sound synthesis, and real-time aerodynamics visualizer.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GSAP ScrollTrigger</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">WebGL Shaders</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/aerion-supercar-experience/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/aerion-supercar-experience" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/aerion-supercar-experience/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="automotive" 
+           data-3d="true" 
+           data-search="surge sports energy ridge bike mountain bike 3d rock pedestal r3f draco">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-red-600/10 text-red-400 border-red-600/20">R3F + Drei + Draco</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">95% COMPRESSED 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">SURGE Sports Energy (Ridge Bike)</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Interactive 3D mountain bike configurator on a sculpted rock pedestal. Features 3 custom bike editions (Ridge, Vortex, Spectra), custom colorways, and 360° inspection.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">React Three Fiber</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Drei</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Draco Loader</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GSAP</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/surge-sports-energy/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/surge-sports-energy" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/surge-sports-energy/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="automotive" 
+           data-3d="true" 
+           data-search="thar 4x4 offroad off-road vehicle suv three.js car configurator">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-red-600/10 text-red-400 border-red-600/20">Three.js + WebGL</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">4X4 VEHICLE 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Thar 4x4 Off-Road Experience</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Rugged all-terrain 3D vehicle showcase with terrain lighting, suspension simulation, custom wheel choices, and interactive driving modes.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">OrbitControls</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Custom Shaders</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/thar-offroad-experience/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/thar-offroad-experience" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/thar-offroad-experience/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="product" 
+           data-3d="true" 
+           data-search="adidas awwwards 3d three.js nextjs 15 r3f gsap baked textures jacket audio">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-amber-600/10 text-amber-400 border-amber-600/20">Next.js 15 + R3F + GSAP</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">AWWWARDS WINNER</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Adidas 3D Experience</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Awwwards-winning 3D Adidas landing page with baked studio environments, 3D jacket inspection, dynamic environment spheres, and integrated background audio.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Next.js 15</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">React Three Fiber</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GSAP ScrollTrigger</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Baked Textures</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/adidas-3d-experience/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/adidas-3d-experience" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/adidas-3d-experience/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="product" 
+           data-3d="true" 
+           data-search="apple iphone 15 pro titanium r3f three.js gsap 3d model view switcher">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-amber-600/10 text-amber-400 border-amber-600/20">R3F + Three.js + GSAP</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">TITANIUM 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Apple iPhone 15 Pro</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Apple Titanium showcase recreation with interactive 3D model rotation, dynamic titanium colorway switcher (Natural, Blue, White, Black), and 6.1" / 6.7" size toggling.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">React Three Fiber</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GSAP Timeline</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Draco Loader</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/apple-iphone-15-3d/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/apple-iphone-15-3d" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/apple-iphone-15-3d/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="product" 
+           data-3d="true" 
+           data-search="nothing phone 3a pro shoaib-inamdar three.js gsap scrolltrigger glyph">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-amber-600/10 text-amber-400 border-amber-600/20">Three.js + GSAP ScrollTrigger</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">GLYPH LIGHTING 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Nothing Phone (3a Pro)</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Immersive 3D landing page for Nothing Phone featuring synchronized 468-frame disassembly, camera fly-throughs, and transparent glyph lighting effects triggered by scrolling.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GSAP ScrollTrigger</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Canvas Scrub</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/nothing-phone-3d/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/nothing-phone-3d" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/nothing-phone-3d/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="product" 
+           data-3d="true" 
+           data-search="fanta zero 3d soda can fizzi splash fruits flavor orange threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-amber-600/10 text-amber-400 border-amber-600/20">Three.js + WebGL</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">BEVERAGE 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Fanta 3D Experience</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Vibrant, high-energy 3D soda can experience featuring interactive 360° can rotation, liquid splash physics, fruit particle explosions, and flavor switches.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GLSL Shaders</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Particle Physics</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/fanta-3d-experience/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/fanta-3d-experience" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/fanta-3d-experience/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="product" 
+           data-3d="true" 
+           data-search="fruitivo luxury fragrance perfume bottle glass refraction shader threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-amber-600/10 text-amber-400 border-amber-600/20">Three.js + Refraction Shader</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">LUXURY GLASS 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Fruitivo Fragrance Boutique</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Luxury perfume showcase featuring physical glass refraction, liquid meniscus shading, metallic gold pump details, and subtle ambient particle aura.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Custom Glass GLSL</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HDR Lighting</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/fruitivo-luxury-fragrance/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/fruitivo-luxury-fragrance" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/fruitivo-luxury-fragrance/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="spider-man spiderman marvel interactive cinematic web threejs gsap">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + Kinetic Typography</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">CINEMATIC 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Spider-Man Web Experience</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Interactive Marvel Spider-Man cinematic landing page featuring dynamic parallax web-slinging scenes, kinetic typography, and comic-style shader transitions.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GSAP</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Canvas VFX</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/spiderman-interactive-showcase/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/spiderman-interactive-showcase" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/spiderman-interactive-showcase/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="game of thrones got westeros iron throne dragon fire ice threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + Head-Tracking</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">IMMERSIVE 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Game of Thrones Journey</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Westeros interactive 3D universe with interactive Iron Throne inspection, 3D dragon flight simulator, dynamic fire and ice particles, and house banners.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Particle Systems</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Audio Engine</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">WebGL</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/game-of-thrones-experience/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/game-of-thrones-experience" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/game-of-thrones-experience/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="godzilla king monsters titan cursor tracking head articulation threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + Cursor Tracking</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">TITAN 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Godzilla King of the Monsters</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Titan-scale WebGL experience where the king of monsters tracks user cursor movements with realistic head articulation, glowing dorsal fins, and atomic breath shaders.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Inverse Kinematics</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Volumetric Glow</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/godzilla-cinematic-experience/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/godzilla-cinematic-experience" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/godzilla-cinematic-experience/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="avatar pandora way of water bioluminescence ilu floating islands threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + Bioluminescence</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">PANDORA 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Avatar: Pandora Experience</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Cinematic dive into the oceans and floating islands of Pandora featuring bioluminescent shader flora, swimming Ilu creatures, and water caustics.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Bioluminescence Shaders</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Audio Sync</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">WebGL</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/avatar-3d-cinematic/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/avatar-3d-cinematic" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/avatar-3d-cinematic/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="navis luxury cruises yacht ship ocean water waves sunset threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + Ocean Physics</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">OCEANIC 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">NAVIS Luxury Cruises</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Interactive luxury mega-yacht showcase with dynamic Gerstner ocean waves, sunset sun glare shaders, deck inspection, and route navigation.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Gerstner Waves</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">PBR Materials</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/navis-luxury-cruises/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/navis-luxury-cruises" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/navis-luxury-cruises/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="jurassic park dinosaur t-rex skeletal animation roar threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + Skeletal Animation</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">PREHISTORIC 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Jurassic 3D Experience</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Interactive T-Rex encounter with skeletal animation blending, roaring audio triggers, flashlight cursor illumination, and prehistoric jungle ambience.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Skeletal Animations</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Dynamic Lighting</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/jurassic-3d-experience/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/jurassic-3d-experience" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/jurassic-3d-experience/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="moana ocean voyage wayfinder canoe sailing water ripples threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + Water Shaders</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">VOYAGE 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Moana Oceanic Voyage</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Polynesian sailing adventure featuring an authentic Wayfinder canoe, dynamic water ripple simulation, interactive starry sky constellation map, and tropical atmosphere.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Water Ripples</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Sky Dome</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/moana-cinematic-voyage/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/moana-cinematic-voyage" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/moana-cinematic-voyage/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="meridian luxury estates real estate architecture villa walkthrough threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + Architectural Walkthrough</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">ARCHITECTURE 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Meridian Luxury Estates</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">High-end architectural 3D property tour with real-time floor plan switching, realistic daylight cycle simulation, marble reflections, and room exploration.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Daylight Shaders</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Floor Plan Views</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/meridian-luxury-estates/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/meridian-luxury-estates" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/meridian-luxury-estates/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="cinematic" 
+           data-3d="true" 
+           data-search="movade luxury travel flight arcs globe earth pins threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-blue-600/10 text-blue-400 border-blue-600/20">Three.js + 3D Earth Globe</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">TRAVEL 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Movade Luxury Travel</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Interactive 3D travel destination planner featuring a rotating topographic globe, flight trajectory arcs, destination pins, and kinetic destination cards.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Globe Topography</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Arc Curves</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/movade-luxury-travel/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/movade-luxury-travel" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/movade-luxury-travel/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="product" 
+           data-3d="true" 
+           data-search="drift motorsport apparel streetwear racing suit fabric e-commerce threejs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-amber-600/10 text-amber-400 border-amber-600/20">Three.js + Fabric Shaders</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">E-COMMERCE 3D</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">DRIFT Motorsport Apparel</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">High-octane streetwear & racing apparel store featuring interactive 3D racing suit inspection, fabric weave normal maps, and dynamic color customization.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Three.js</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Fabric Micro-details</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">E-commerce UI</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/drift-motorsport-apparel/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/drift-motorsport-apparel" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/drift-motorsport-apparel/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="true" 
+           data-search="interactive 3d portfolio react three fiber r3f desktop workstation threejs developer ladunjexa 780 stars">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">React 18 + R3F + Drei</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">780+ ⭐ SHOWCASE</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Interactive 3D Portfolio Workstation</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Widely acclaimed 3D developer portfolio featuring an interactive 3D desktop workstation with RGB lighting, floating tech decals, and interactive 3D planet contact canvas.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">React 18</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">React Three Fiber</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Drei</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Framer Motion</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/interactive-3d-portfolio/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/interactive-3d-portfolio" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/interactive-3d-portfolio/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="hacker bash terminal unix cli retro portfolio command line">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Interactive CLI / Terminal</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">RETRO CYBER</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Hacker Bash Terminal</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Interactive Unix terminal portfolio emulator supporting 25+ real bash commands, autocomplete, themes, secret easter eggs, and interactive games.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vanilla JS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Bash Simulator</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">CSS CRT Scanlines</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/user-terminal/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/user-terminal" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/user-terminal/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 1 software engineer modern developer">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Modern Portfolio</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">RESPONSIVE</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Developer Portfolio 1</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Modern responsive software engineer portfolio with animated skill meters, project case studies, and GitHub project sync.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">CSS3</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">GitHub API</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-1/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-1" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-1/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 2 creative showcase card layout">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Creative Showcase</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">CREATIVE</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Creative Portfolio 2</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Card-based portfolio layout with smooth hover expansions, dark/light theme switching, and live project cards.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Lucide Icons</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-2/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-2" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-2/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 3 engineer technical minimalist resume">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Technical Portfolio</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">MINIMALIST</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Engineer Portfolio 3</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Sleek dark minimalist developer resume site with interactive timeline, skills radar, and contact form.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">CSS Grid</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-3/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-3" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-3/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 4 fullstack developer gallery blog">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Full-Stack Portfolio</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">MODERN</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Developer Portfolio 4</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Full-stack developer showcase with filterable project galleries, testimonial carousel, and blog reader.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-4/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-4" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-4/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 5 ui ux designer product case studies">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">UI/UX Designer</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">CLEAN</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Designer Portfolio 5</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Clean typography-focused portfolio designed for UI/UX engineers and product designers with deep case studies.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Typography CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-5/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-5" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-5/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 6 particles micro interactions animated">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Creative Developer</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">ANIMATED</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Creative Portfolio 6</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Interactive portfolio with canvas particle background, micro-interactions, and smooth navigation.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5 Canvas</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">CSS3</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-6/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-6" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-6/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 7 personal brand bio milestones">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Personal Brand</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">PORTFOLIO</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Personal Portfolio 7</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Single-page personal brand portfolio with hero bio, experience milestones, and featured open-source work.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-7/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-7" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-7/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 8 dark mode modals skill pills">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Interactive Showcase</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">INTERACTIVE</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Creative Portfolio 8</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Sleek dark-mode portfolio with interactive skill pills, project modal overlays, and social links.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">CSS Modules</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-8/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-8" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-8/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 9 executive resume cv software engineer">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Software Engineer</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">DEV RESUME</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Developer Portfolio 9</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Executive developer resume portfolio with downloadable CV, publication list, and code samples.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-9/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-9" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-9/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 10 bento grid developer technical">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Tech Showcase</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">GRID LAYOUT</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Developer Portfolio 10</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Bento-grid styled portfolio displaying technical competencies, live repository status, and hobby projects.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Bento CSS Grid</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-10/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-10" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-10/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 11 react spa vite tailwind stateful">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">React SPA</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">REACT APP</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">React Portfolio 11</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Modern React-powered portfolio with stateful theme switcher, interactive project filtering, and smooth transitions.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">React</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Vite</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-11/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-11" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-11/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 12 react framer motion dynamic">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">React + Animations</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">ANIMATED SPA</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">React Portfolio 12</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Dynamic React application showcasing interactive UI components, timeline visualizations, and contact integrations.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">React</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Framer Motion</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-12/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-12" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-12/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 13 fullstack api architecture cloud">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Fullstack Showcase</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">FULLSTACK</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Fullstack Portfolio 13</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Full-stack developer portfolio showcasing API endpoints, architectural diagrams, database projects, and cloud deployments.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">React</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Node.js Architecture</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Tailwind CSS</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-13/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-13" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-13/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <div class="glass-card rounded-2xl p-6 flex flex-col justify-between" 
+           data-category="portfolio" 
+           data-3d="false" 
+           data-search="portfolio 14 developer minimal clean dark">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded border bg-emerald-600/10 text-emerald-400 border-emerald-600/20">Creative Showcase</span>
+            <span class="text-xs text-blue-400 font-mono font-bold tracking-wider">MODERN</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Modern Portfolio 14</h3>
+          <p class="text-sm text-gray-400 mb-4 leading-relaxed">Responsive modern portfolio highlighting technical architecture, open-source work, contact links, and performance badges.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">HTML5</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">Modern CSS</span> <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 text-gray-300 border border-white/10">JavaScript</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-white/5 flex gap-2 items-center">
+          <a href="https://cyber-atharv.github.io/portfolio-14/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20">
+            <i class="fa-solid fa-play text-xs"></i> <span>Launch 3D</span>
+          </a>
+          <a href="https://github.com/cyber-atharv/portfolio-14" target="_blank" rel="noopener noreferrer" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="View Source on GitHub">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <button onclick="copyToClipboard('https://cyber-atharv.github.io/portfolio-14/', this)" class="text-center py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition border border-white/5" title="Copy Live URL">
+            <i class="fa-solid fa-copy text-sm"></i>
+          </button>
+        </div>
+      </div>
+    
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-20 pt-8 border-t border-white/10 text-center text-sm text-gray-400">
+      <div class="flex flex-wrap justify-center gap-6 mb-4 text-xs font-mono">
+        <a href="https://github.com/cyber-atharv" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-github mr-1"></i>GitHub Profile</a>
+        <a href="https://github.com/cyber-atharv/3d-landing-pages-showcase" target="_blank" class="hover:text-white transition"><i class="fa-solid fa-code-branch mr-1"></i>Directory Repo</a>
+        <a href="https://cyber-atharv.github.io/" target="_blank" class="hover:text-white transition"><i class="fa-solid fa-globe mr-1"></i>Master Hub</a>
+      </div>
+      <p class="mb-2">Crafted &amp; Engineered with ❤️ by <a href="https://github.com/cyber-atharv" target="_blank" class="text-blue-400 hover:underline font-semibold">Atharv Hogade</a></p>
+      <p class="text-xs text-gray-500">All 35 interactive experiences are built, optimized, and hosted on GitHub Pages.</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-blue-600 text-white font-medium text-xs shadow-2xl pointer-events-none">
+    <i class="fa-solid fa-circle-check text-sm"></i>
+    <span id="toastMsg">URL copied to clipboard!</span>
+  </div>
+
+  <script>
+    let activeFilter = 'all';
+
+    function setFilter(category, button) {
+      activeFilter = category;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      filterCards();
+    }
+
+    function searchCards() {
+      filterCards();
+    }
+
+    function filterCards() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('#projectGrid .glass-card');
+
+      cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const is3d = card.getAttribute('data-3d') === 'true';
+        const searchData = (card.getAttribute('data-search') + ' ' + card.innerText).toLowerCase();
+
+        let matchesCategory = false;
+        if (activeFilter === 'all') matchesCategory = true;
+        else if (activeFilter === '3d-only') matchesCategory = is3d;
+        else matchesCategory = (category === activeFilter);
+
+        const matchesSearch = (!query || searchData.includes(query));
+
+        if (matchesCategory && matchesSearch) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function copyToClipboard(url, button) {
+      navigator.clipboard.writeText(url).then(() => {
+        const icon = button.querySelector('i');
+        const originalClass = icon.className;
+        icon.className = 'fa-solid fa-check text-emerald-400';
+        showToast('Copied: ' + url);
+        setTimeout(() => icon.className = originalClass, 1800);
+      });
+    }
+
+    const allProjectsData = [{"title":"VELOX Automotive Trilogy","url":"https://cyber-atharv.github.io/velox-automotive/","repo":"https://github.com/cyber-atharv/velox-automotive","is3d":true},{"title":"Aerion GT Supercar","url":"https://cyber-atharv.github.io/aerion-supercar-experience/","repo":"https://github.com/cyber-atharv/aerion-supercar-experience","is3d":true},{"title":"SURGE Sports Energy (Ridge Bike)","url":"https://cyber-atharv.github.io/surge-sports-energy/","repo":"https://github.com/cyber-atharv/surge-sports-energy","is3d":true},{"title":"Thar 4x4 Off-Road Experience","url":"https://cyber-atharv.github.io/thar-offroad-experience/","repo":"https://github.com/cyber-atharv/thar-offroad-experience","is3d":true},{"title":"Adidas 3D Experience","url":"https://cyber-atharv.github.io/adidas-3d-experience/","repo":"https://github.com/cyber-atharv/adidas-3d-experience","is3d":true},{"title":"Apple iPhone 15 Pro","url":"https://cyber-atharv.github.io/apple-iphone-15-3d/","repo":"https://github.com/cyber-atharv/apple-iphone-15-3d","is3d":true},{"title":"Nothing Phone (3a Pro)","url":"https://cyber-atharv.github.io/nothing-phone-3d/","repo":"https://github.com/cyber-atharv/nothing-phone-3d","is3d":true},{"title":"Fanta 3D Experience","url":"https://cyber-atharv.github.io/fanta-3d-experience/","repo":"https://github.com/cyber-atharv/fanta-3d-experience","is3d":true},{"title":"Fruitivo Fragrance Boutique","url":"https://cyber-atharv.github.io/fruitivo-luxury-fragrance/","repo":"https://github.com/cyber-atharv/fruitivo-luxury-fragrance","is3d":true},{"title":"Spider-Man Web Experience","url":"https://cyber-atharv.github.io/spiderman-interactive-showcase/","repo":"https://github.com/cyber-atharv/spiderman-interactive-showcase","is3d":true},{"title":"Game of Thrones Journey","url":"https://cyber-atharv.github.io/game-of-thrones-experience/","repo":"https://github.com/cyber-atharv/game-of-thrones-experience","is3d":true},{"title":"Godzilla King of the Monsters","url":"https://cyber-atharv.github.io/godzilla-cinematic-experience/","repo":"https://github.com/cyber-atharv/godzilla-cinematic-experience","is3d":true},{"title":"Avatar: Pandora Experience","url":"https://cyber-atharv.github.io/avatar-3d-cinematic/","repo":"https://github.com/cyber-atharv/avatar-3d-cinematic","is3d":true},{"title":"NAVIS Luxury Cruises","url":"https://cyber-atharv.github.io/navis-luxury-cruises/","repo":"https://github.com/cyber-atharv/navis-luxury-cruises","is3d":true},{"title":"Jurassic 3D Experience","url":"https://cyber-atharv.github.io/jurassic-3d-experience/","repo":"https://github.com/cyber-atharv/jurassic-3d-experience","is3d":true},{"title":"Moana Oceanic Voyage","url":"https://cyber-atharv.github.io/moana-cinematic-voyage/","repo":"https://github.com/cyber-atharv/moana-cinematic-voyage","is3d":true},{"title":"Meridian Luxury Estates","url":"https://cyber-atharv.github.io/meridian-luxury-estates/","repo":"https://github.com/cyber-atharv/meridian-luxury-estates","is3d":true},{"title":"Movade Luxury Travel","url":"https://cyber-atharv.github.io/movade-luxury-travel/","repo":"https://github.com/cyber-atharv/movade-luxury-travel","is3d":true},{"title":"DRIFT Motorsport Apparel","url":"https://cyber-atharv.github.io/drift-motorsport-apparel/","repo":"https://github.com/cyber-atharv/drift-motorsport-apparel","is3d":true},{"title":"Interactive 3D Portfolio Workstation","url":"https://cyber-atharv.github.io/interactive-3d-portfolio/","repo":"https://github.com/cyber-atharv/interactive-3d-portfolio","is3d":true},{"title":"Hacker Bash Terminal","url":"https://cyber-atharv.github.io/user-terminal/","repo":"https://github.com/cyber-atharv/user-terminal","is3d":false},{"title":"Developer Portfolio 1","url":"https://cyber-atharv.github.io/portfolio-1/","repo":"https://github.com/cyber-atharv/portfolio-1","is3d":false},{"title":"Creative Portfolio 2","url":"https://cyber-atharv.github.io/portfolio-2/","repo":"https://github.com/cyber-atharv/portfolio-2","is3d":false},{"title":"Engineer Portfolio 3","url":"https://cyber-atharv.github.io/portfolio-3/","repo":"https://github.com/cyber-atharv/portfolio-3","is3d":false},{"title":"Developer Portfolio 4","url":"https://cyber-atharv.github.io/portfolio-4/","repo":"https://github.com/cyber-atharv/portfolio-4","is3d":false},{"title":"Designer Portfolio 5","url":"https://cyber-atharv.github.io/portfolio-5/","repo":"https://github.com/cyber-atharv/portfolio-5","is3d":false},{"title":"Creative Portfolio 6","url":"https://cyber-atharv.github.io/portfolio-6/","repo":"https://github.com/cyber-atharv/portfolio-6","is3d":false},{"title":"Personal Portfolio 7","url":"https://cyber-atharv.github.io/portfolio-7/","repo":"https://github.com/cyber-atharv/portfolio-7","is3d":false},{"title":"Creative Portfolio 8","url":"https://cyber-atharv.github.io/portfolio-8/","repo":"https://github.com/cyber-atharv/portfolio-8","is3d":false},{"title":"Developer Portfolio 9","url":"https://cyber-atharv.github.io/portfolio-9/","repo":"https://github.com/cyber-atharv/portfolio-9","is3d":false},{"title":"Developer Portfolio 10","url":"https://cyber-atharv.github.io/portfolio-10/","repo":"https://github.com/cyber-atharv/portfolio-10","is3d":false},{"title":"React Portfolio 11","url":"https://cyber-atharv.github.io/portfolio-11/","repo":"https://github.com/cyber-atharv/portfolio-11","is3d":false},{"title":"React Portfolio 12","url":"https://cyber-atharv.github.io/portfolio-12/","repo":"https://github.com/cyber-atharv/portfolio-12","is3d":false},{"title":"Fullstack Portfolio 13","url":"https://cyber-atharv.github.io/portfolio-13/","repo":"https://github.com/cyber-atharv/portfolio-13","is3d":false},{"title":"Modern Portfolio 14","url":"https://cyber-atharv.github.io/portfolio-14/","repo":"https://github.com/cyber-atharv/portfolio-14","is3d":false}];
+
+    function copyAllMarkdown() {
+      let md = '# 🚀 3D WebGL Landing Pages & Portfolios Showcase\n\nCurated directory by **Atharv Hogade** ([@cyber-atharv](https://github.com/cyber-atharv))\n\n### ✨ 3D WebGL Experiences & Configurators\n\n| Project | Live Demo | GitHub Code |\n| :--- | :--- | :--- |\n';
+      
+      allProjectsData.filter(p => p.is3d).forEach(p => {
+        md += '| **' + p.title + '** | [Launch 3D](' + p.url + ') | [Source Code](' + p.repo + ') |\n';
+      });
+
+      md += '\n### 🎨 Developer Portfolios\n\n| Project | Live Demo | GitHub Code |\n| :--- | :--- | :--- |\n';
+      allProjectsData.filter(p => !p.is3d).forEach(p => {
+        md += '| **' + p.title + '** | [Live Demo](' + p.url + ') | [Source Code](' + p.repo + ') |\n';
+      });
+
+      navigator.clipboard.writeText(md).then(() => {
+        showToast('All 35 URLs copied as Markdown table!');
+      });
+    }
+
+    // Keyboard shortcut / for search
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== document.getElementById('searchInput')) {
+        e.preventDefault();
+        document.getElementById('searchInput').focus();
+      }
+    });
+  </script>
+</body>
+</html>
